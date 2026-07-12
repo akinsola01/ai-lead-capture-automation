@@ -1,0 +1,855 @@
+{
+  "name": "AI-Powered Website Lead Processing & Notification System_Stacked1_(28th June)",
+  "nodes": [
+    {
+      "parameters": {
+        "form": "txYsVb5Gttus"
+      },
+      "type": "n8n-nodes-fillout.filloutTrigger",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -784
+      ],
+      "id": "41b7b766-4ee8-4e35-b5bc-f33b5935eea4",
+      "name": "Fillout Trigger",
+      "webhookId": "0865cd48-43b6-4354-b093-6719f9cc100b",
+      "credentials": {
+        "filloutApi": {
+          "id": "frvbGGggHClAjfKW",
+          "name": "Fillout account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        96
+      ],
+      "id": "be5fe198-a12e-455c-ad67-0679e3fb1dce",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "2qBTSmokdKd3urF9",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"AI Summary\": \"Wants a paid social audit and targeting fix, $1-3k, start within 2 weeks.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        96
+      ],
+      "id": "4f27424e-0f7c-4c6a-96af-1d59c96aaf58",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead_capture_form",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        32,
+        -784
+      ],
+      "id": "0d925320-b519-47e1-a7de-c47efdd3f4f6",
+      "name": "Webhook1",
+      "webhookId": "cb09d19e-591c-4cd6-82e8-d507182dcedc"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"name\":\"{{ $json.questions['5CVg'].value\n    .toLowerCase()\n    .replace(/\\b\\w/g, c => c.toUpperCase()) }}\",\n  \"email\":\"{{ $json.questions.jhtk.value }}\",\n  \"company\":\"{{ $json.questions['2FcJ'].value\n    .toLowerCase()\n    .replace(/\\b\\w/g, c => c.toUpperCase()) }}\",\n  \"budget\":\"{{ $json.questions['7Btw'].value }}\",\n  \"message\":\"{{ $json.questions.w9ku.value }}\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        -784
+      ],
+      "id": "23b97b7e-3e7d-48bd-affb-f003efe835a8",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Summarize this website lead.\n\nMessage:{{ $json.message }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an assistant for a marketing agency.  Summarize website lead submissions.  Rules: - Return exactly one sentence. - Maximum 20 words. - Mention what the client needs. - Include the budget if available. - Include any timeline if mentioned. - Return only the summary."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        496,
+        -784
+      ],
+      "id": "4780ff2b-ff41-444a-a08d-a5ce20b776c7",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        496,
+        -560
+      ],
+      "id": "4a1eea4b-255d-45d0-ab21-470b72cae4c4",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "2qBTSmokdKd3urF9",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"AI Summary\": \"Wants a paid social audit and targeting fix, $1-3k, start within 2 weeks.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        -560
+      ],
+      "id": "d6089f54-519f-4b46-9257-c4228f6ceb44",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1lQ9ls967OSRQPNLfxyR7ltXhHugC5m0ofVt68V9ggdI",
+          "mode": "list",
+          "cachedResultName": "Lead Capture",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lQ9ls967OSRQPNLfxyR7ltXhHugC5m0ofVt68V9ggdI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lQ9ls967OSRQPNLfxyR7ltXhHugC5m0ofVt68V9ggdI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Email ": "={{ $('Edit Fields1').item.json.email }}",
+            "Company ": "={{ $('Edit Fields1').item.json.company }}",
+            "Name ": "={{ $('Edit Fields1').item.json.name }}",
+            "Budget": "={{ $('Edit Fields1').item.json.budget }}",
+            "Full Message": "={{ $('Edit Fields1').item.json.message }}",
+            "AI Summary": "={{ $json.output['AI Summary'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name ",
+              "displayName": "Name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email ",
+              "displayName": "Email ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company ",
+              "displayName": "Company ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Full Message",
+              "displayName": "Full Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI Summary",
+              "displayName": "AI Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        -784
+      ],
+      "id": "187b3e06-9359-4ec4-894c-33bc123a73fd",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "U40n9NncdlnjHPQA",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "akinsakingbola@gmail.com",
+        "subject": "=🚀 New Lead | {{ $('Edit Fields1').item.json.company }} | {{ $('Edit Fields1').item.json.name }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n</head>\n\n<body style=\"margin:0;padding:30px;background:#f4f7fb;font-family:Arial,Helvetica,sans-serif;\">\n\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n<tr>\n<td align=\"center\">\n\n<table width=\"650\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;\">\n\n    <!-- Header -->\n    <tr>\n        <td style=\"background:#2563eb;padding:30px;text-align:center;\">\n            <h1 style=\"margin:0;color:#ffffff;font-size:28px;\">\n                🚀 New Website Lead\n            </h1>\n            <p style=\"margin:8px 0 0;color:#dbeafe;font-size:15px;\">\n                A new prospect has just submitted your contact form.\n            </p>\n        </td>\n    </tr>\n\n    <!-- AI Summary -->\n    <tr>\n        <td style=\"padding:30px;\">\n\n            <div style=\"background:#eff6ff;border-left:5px solid #2563eb;padding:20px;border-radius:8px;\">\n                <p style=\"margin:0;font-size:13px;color:#6b7280;font-weight:bold;\">\n                    AI SUMMARY\n                </p>\n\n                <p style=\"margin:10px 0 0;font-size:18px;font-weight:bold;color:#111827;\">{{ $('Basic LLM Chain1').item.json.output['AI Summary'] }}\n                  \n                </p>\n            </div>\n\n        </td>\n    </tr>\n\n    <!-- Lead Information -->\n    <tr>\n        <td style=\"padding:0 30px 30px 30px;\">\n\n            <h2 style=\"margin-top:0;color:#111827;\">\n                Lead Details\n            </h2>\n\n            <table width=\"100%\" cellpadding=\"10\" cellspacing=\"0\" style=\"border-collapse:collapse;\">\n\n                <tr style=\"background:#f9fafb;\">\n                    <td style=\"font-weight:bold;\">👤 Name</td>\n                    <td>{{ $('Edit Fields1').item.json.name }}</td>\n                </tr>\n\n                <tr>\n                    <td style=\"font-weight:bold;\">🏢 Company</td>\n                    <td>{{ $('Edit Fields1').item.json.company }}</td>\n                </tr>\n\n                <tr style=\"background:#f9fafb;\">\n                    <td style=\"font-weight:bold;\">📧 Email</td>\n                    <td>{{ $('Edit Fields1').item.json.email }}</td>\n                </tr>\n\n                <tr>\n                    <td style=\"font-weight:bold;\">💰 Budget</td>\n                    <td>{{ $('Edit Fields1').item.json.budget }}</td>\n                </tr>\n\n            </table>\n\n        </td>\n    </tr>\n\n    <!-- Message -->\n    <tr>\n        <td style=\"padding:0 30px 30px;\">\n\n            <h2 style=\"color:#111827;\">\n                Client Message\n            </h2>\n\n            <div style=\"background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;padding:20px;font-size:15px;line-height:1.7;color:#374151;\">\n                {{ $('Edit Fields1').item.json.message }}\n            </div>\n\n        </td>\n    </tr>\n\n    <!-- Call to Action -->\n    <tr>\n        <td style=\"padding:0 30px 35px;\">\n\n            <table width=\"100%\" style=\"background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;\">\n                <tr>\n                    <td style=\"padding:20px;\">\n\n                        <strong style=\"color:#166534;font-size:16px;\">\n                            📞 Follow-up Recommended\n                        </strong>\n\n                        <p style=\"margin:10px 0 0;color:#166534;\">\n                            This lead has been captured successfully. Consider responding promptly while the prospect is actively looking for assistance.\n                        </p>\n\n                    </td>\n                </tr>\n            </table>\n\n        </td>\n    </tr>\n\n    <!-- Footer -->\n    <tr>\n        <td style=\"background:#f9fafb;padding:20px;text-align:center;font-size:12px;color:#6b7280;\">\n            Generated automatically by your n8n Website Lead Automation workflow.\n        </td>\n    </tr>\n\n</table>\n\n</td>\n</tr>\n</table>\n\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1056,
+        -784
+      ],
+      "id": "7f9f47b1-03d6-46f7-b639-a7352bf387d1",
+      "name": "Send a message1",
+      "webhookId": "00abfa13-523e-4fe4-978a-53e8f16b2858",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "j28952fR27j0eiXv",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead_capture_form",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        -160
+      ],
+      "id": "46df38b9-f3d7-436b-8ead-17da682ae739",
+      "name": "Receive Website Lead",
+      "webhookId": "cb09d19e-591c-4cd6-82e8-d507182dcedc"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Summarize this website lead.\n\nMessage:{{ $json.message }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an assistant for a marketing agency.  Summarize website lead submissions.  Rules: - Return exactly one sentence. - Maximum 20 words. - Mention what the client needs. - Include the budget if available. - Include any timeline if mentioned. - Return only the summary."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        384,
+        -160
+      ],
+      "id": "db96525d-abd8-4d20-b35b-67e16e3a5d11",
+      "name": "Generate AI Lead Summary"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1lQ9ls967OSRQPNLfxyR7ltXhHugC5m0ofVt68V9ggdI",
+          "mode": "list",
+          "cachedResultName": "Lead Capture",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lQ9ls967OSRQPNLfxyR7ltXhHugC5m0ofVt68V9ggdI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lQ9ls967OSRQPNLfxyR7ltXhHugC5m0ofVt68V9ggdI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Email ": "={{ $('Data Standardization').item.json.email }}",
+            "Company ": "={{ $('Data Standardization').item.json.company }}",
+            "Name ": "={{ $('Data Standardization').item.json.name }}",
+            "Budget": "={{ $('Data Standardization').item.json.budget }}",
+            "Full Message": "={{ $('Data Standardization').item.json.message }}",
+            "AI Summary": "={{ $json.output['AI Summary'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name ",
+              "displayName": "Name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email ",
+              "displayName": "Email ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company ",
+              "displayName": "Company ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Full Message",
+              "displayName": "Full Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI Summary",
+              "displayName": "AI Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        736,
+        -160
+      ],
+      "id": "462c0afa-476c-473d-aa2d-73aa6a00ae1c",
+      "name": "Store Lead Record",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "U40n9NncdlnjHPQA",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "akinsakingbola@gmail.com",
+        "subject": "=🚀 New Lead | {{ $('Data Standardization').item.json.company }} | {{ $('Data Standardization').item.json.name }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n</head>\n\n<body style=\"margin:0;padding:30px;background:#f4f7fb;font-family:Arial,Helvetica,sans-serif;\">\n\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n<tr>\n<td align=\"center\">\n\n<table width=\"650\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;\">\n\n    <!-- Header -->\n    <tr>\n        <td style=\"background:#2563eb;padding:30px;text-align:center;\">\n            <h1 style=\"margin:0;color:#ffffff;font-size:28px;\">\n                🚀 New Website Lead\n            </h1>\n            <p style=\"margin:8px 0 0;color:#dbeafe;font-size:15px;\">\n                A new prospect has just submitted your contact form.\n            </p>\n        </td>\n    </tr>\n\n    <!-- AI Summary -->\n    <tr>\n        <td style=\"padding:30px;\">\n\n            <div style=\"background:#eff6ff;border-left:5px solid #2563eb;padding:20px;border-radius:8px;\">\n                <p style=\"margin:0;font-size:13px;color:#6b7280;font-weight:bold;\">\n                    AI SUMMARY\n                </p>\n\n                <p style=\"margin:10px 0 0;font-size:18px;font-weight:bold;color:#111827;\">{{ $('Generate AI Lead Summary').item.json.output['AI Summary'] }}\n                  \n                </p>\n            </div>\n\n        </td>\n    </tr>\n\n    <!-- Lead Information -->\n    <tr>\n        <td style=\"padding:0 30px 30px 30px;\">\n\n            <h2 style=\"margin-top:0;color:#111827;\">\n                Lead Details\n            </h2>\n\n            <table width=\"100%\" cellpadding=\"10\" cellspacing=\"0\" style=\"border-collapse:collapse;\">\n\n                <tr style=\"background:#f9fafb;\">\n                    <td style=\"font-weight:bold;\">👤 Name</td>\n                    <td>{{ $('Data Standardization').item.json.name }}</td>\n                </tr>\n\n                <tr>\n                    <td style=\"font-weight:bold;\">🏢 Company</td>\n                    <td>{{ $('Data Standardization').item.json.company }}</td>\n                </tr>\n\n                <tr style=\"background:#f9fafb;\">\n                    <td style=\"font-weight:bold;\">📧 Email</td>\n                    <td>{{ $('Data Standardization').item.json.email }}</td>\n                </tr>\n\n                <tr>\n                    <td style=\"font-weight:bold;\">💰 Budget</td>\n                    <td>{{ $('Data Standardization').item.json.budget }}</td>\n                </tr>\n\n            </table>\n\n        </td>\n    </tr>\n\n    <!-- Message -->\n    <tr>\n        <td style=\"padding:0 30px 30px;\">\n\n            <h2 style=\"color:#111827;\">\n                Client Message\n            </h2>\n\n            <div style=\"background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;padding:20px;font-size:15px;line-height:1.7;color:#374151;\">\n                {{ $('Data Standardization').item.json.message }}\n            </div>\n\n        </td>\n    </tr>\n\n    <!-- Call to Action -->\n    <tr>\n        <td style=\"padding:0 30px 35px;\">\n\n            <table width=\"100%\" style=\"background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;\">\n                <tr>\n                    <td style=\"padding:20px;\">\n\n                        <strong style=\"color:#166534;font-size:16px;\">\n                            📞 Follow-up Recommended\n                        </strong>\n\n                        <p style=\"margin:10px 0 0;color:#166534;\">\n                            This lead has been captured successfully. Consider responding promptly while the prospect is actively looking for assistance.\n                        </p>\n\n                    </td>\n                </tr>\n            </table>\n\n        </td>\n    </tr>\n\n    <!-- Footer -->\n    <tr>\n        <td style=\"background:#f9fafb;padding:20px;text-align:center;font-size:12px;color:#6b7280;\">\n            Generated automatically by your n8n Website Lead Automation workflow.\n        </td>\n    </tr>\n\n</table>\n\n</td>\n</tr>\n</table>\n\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        960,
+        -160
+      ],
+      "id": "e244db17-c598-44bc-9166-31b74bad2d86",
+      "name": "Email Alert",
+      "webhookId": "00abfa13-523e-4fe4-978a-53e8f16b2858",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "j28952fR27j0eiXv",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"name\":\"{{ $json.body.submission.questions[0].value.toLowerCase()\n    .replace(/\\b\\w/g, c => c.toUpperCase())  }}\"\n  \"email\":\"{{ $json.body.submission.questions[1].value }}\",\n  \"company\":\"{{ $json.body.submission.questions[2].value.toLowerCase()\n    .replace(/\\b\\w/g, c => c.toUpperCase()) }}\",\n  \"budget\":\"{{ $json.body.submission.questions[3].value }}\",\n  \"message\":\"{{ $json.body.submission.questions[4].value }}\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        -160
+      ],
+      "id": "6e26b649-c902-4363-8322-5ca0e7ec8c9a",
+      "name": "Data Standardization"
+    }
+  ],
+  "pinData": {
+    "Fillout Trigger": [
+      {
+        "json": {
+          "submissionId": "c5619e74-9d4e-4100-a824-7eaa840f74e3",
+          "submissionTime": "2026-06-29T08:57:55.436Z",
+          "lastUpdatedAt": "2026-06-29T08:57:55.436Z",
+          "questions": {
+            "5CVg": {
+              "name": "Name",
+              "value": "Tunde Okafor"
+            },
+            "jhtk": {
+              "name": "Email",
+              "value": "akinsakingbola@gmail.com"
+            },
+            "2FcJ": {
+              "name": "Company",
+              "value": "BrightPath Logistics"
+            },
+            "7Btw": {
+              "name": "Budget Range",
+              "value": "$1,000–$3,000"
+            },
+            "w9ku": {
+              "name": "What do you need help with?",
+              "value": "Our cost per lead on Facebook and Instagram has doubled this quarter and we don't know why. Need an audit and the targeting fixed, ideally starting within two weeks."
+            }
+          },
+          "calculations": {},
+          "urlParameters": {},
+          "quiz": {},
+          "documents": {},
+          "scheduling": {},
+          "payments": {}
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "host": "its-akinsola0002.app.n8n.cloud",
+            "user-agent": "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)",
+            "content-length": "884",
+            "accept": "application/json",
+            "accept-encoding": "gzip, br",
+            "baggage": "sentry-environment=production,sentry-public_key=fb9e5b294f68425eb7eb6b168b67dc8d,sentry-trace_id=7b13b020a2f1435580a1b91d6dacec1c",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "74.220.48.248",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "a136441d3b2ff896-PDX",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "sentry-trace": "7b13b020a2f1435580a1b91d6dacec1c-a954fad8bbb26d04",
+            "traceparent": "00-6a429b980000000074531ea608f7f5c6-272d40bc46e94e9c-00",
+            "tracestate": "dd=t.tid:6a429b9800000000;t.dm:-3;s:-1;p:272d40bc46e94e9c",
+            "x-datadog-parent-id": "2822983718818893468",
+            "x-datadog-sampling-priority": "-1",
+            "x-datadog-tags": "_dd.p.tid=6a429b9800000000",
+            "x-datadog-trace-id": "8382077029930497478",
+            "x-forwarded-for": "74.220.48.248, 172.68.174.9",
+            "x-forwarded-host": "its-akinsola0002.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-swc-3-79bb64946-tcf2q",
+            "x-is-trusted": "yes",
+            "x-real-ip": "74.220.48.248"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "formId": "txYsVb5Gttus",
+            "formName": "Lead Capture Form",
+            "submission": {
+              "submissionId": "548b3ba0-bd16-4f6c-a948-c4233c0c62da",
+              "submissionTime": "2026-06-29T16:21:45.009Z",
+              "lastUpdatedAt": "2026-06-29T16:21:45.009Z",
+              "questions": [
+                {
+                  "id": "5CVg",
+                  "name": "Name",
+                  "type": "ShortAnswer",
+                  "value": "Tunde Okafor"
+                },
+                {
+                  "id": "jhtk",
+                  "name": "Email",
+                  "type": "EmailInput",
+                  "value": "akinsakingbola@gmail.com"
+                },
+                {
+                  "id": "2FcJ",
+                  "name": "Company",
+                  "type": "ShortAnswer",
+                  "value": "BrightPath Logistics"
+                },
+                {
+                  "id": "7Btw",
+                  "name": "Budget Range",
+                  "type": "Dropdown",
+                  "value": "$1,000–$3,000"
+                },
+                {
+                  "id": "w9ku",
+                  "name": "What do you need help with?",
+                  "type": "LongAnswer",
+                  "value": "Our cost per lead on Facebook and Instagram has doubled this quarter and we don't know why. Need an audit and the targeting fixed, ideally starting within two weeks."
+                }
+              ],
+              "calculations": [],
+              "urlParameters": [],
+              "quiz": {},
+              "documents": [],
+              "scheduling": [],
+              "payments": []
+            }
+          },
+          "webhookUrl": "https://its-akinsola0002.app.n8n.cloud/webhook-test/lead_capture_form",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Receive Website Lead": [
+      {
+        "json": {
+          "headers": {
+            "host": "its-akinsola0002.app.n8n.cloud",
+            "user-agent": "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)",
+            "content-length": "884",
+            "accept": "application/json",
+            "accept-encoding": "gzip, br",
+            "baggage": "sentry-environment=production,sentry-public_key=fb9e5b294f68425eb7eb6b168b67dc8d,sentry-trace_id=7b13b020a2f1435580a1b91d6dacec1c",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "74.220.48.248",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "a136441d3b2ff896-PDX",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "sentry-trace": "7b13b020a2f1435580a1b91d6dacec1c-a954fad8bbb26d04",
+            "traceparent": "00-6a429b980000000074531ea608f7f5c6-272d40bc46e94e9c-00",
+            "tracestate": "dd=t.tid:6a429b9800000000;t.dm:-3;s:-1;p:272d40bc46e94e9c",
+            "x-datadog-parent-id": "2822983718818893468",
+            "x-datadog-sampling-priority": "-1",
+            "x-datadog-tags": "_dd.p.tid=6a429b9800000000",
+            "x-datadog-trace-id": "8382077029930497478",
+            "x-forwarded-for": "74.220.48.248, 172.68.174.9",
+            "x-forwarded-host": "its-akinsola0002.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-swc-3-79bb64946-tcf2q",
+            "x-is-trusted": "yes",
+            "x-real-ip": "74.220.48.248"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "formId": "txYsVb5Gttus",
+            "formName": "Lead Capture Form",
+            "submission": {
+              "submissionId": "548b3ba0-bd16-4f6c-a948-c4233c0c62da",
+              "submissionTime": "2026-06-29T16:21:45.009Z",
+              "lastUpdatedAt": "2026-06-29T16:21:45.009Z",
+              "questions": [
+                {
+                  "id": "5CVg",
+                  "name": "Name",
+                  "type": "ShortAnswer",
+                  "value": "Tunde Okafor"
+                },
+                {
+                  "id": "jhtk",
+                  "name": "Email",
+                  "type": "EmailInput",
+                  "value": "akinsakingbola@gmail.com"
+                },
+                {
+                  "id": "2FcJ",
+                  "name": "Company",
+                  "type": "ShortAnswer",
+                  "value": "BrightPath Logistics"
+                },
+                {
+                  "id": "7Btw",
+                  "name": "Budget Range",
+                  "type": "Dropdown",
+                  "value": "$1,000–$3,000"
+                },
+                {
+                  "id": "w9ku",
+                  "name": "What do you need help with?",
+                  "type": "LongAnswer",
+                  "value": "Our cost per lead on Facebook and Instagram has doubled this quarter and we don't know why. Need an audit and the targeting fixed, ideally starting within two weeks."
+                }
+              ],
+              "calculations": [],
+              "urlParameters": [],
+              "quiz": {},
+              "documents": [],
+              "scheduling": [],
+              "payments": []
+            }
+          },
+          "webhookUrl": "https://its-akinsola0002.app.n8n.cloud/webhook-test/lead_capture_form",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Fillout Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate AI Lead Summary",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Generate AI Lead Summary",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receive Website Lead": {
+      "main": [
+        [
+          {
+            "node": "Data Standardization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate AI Lead Summary": {
+      "main": [
+        [
+          {
+            "node": "Store Lead Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Lead Record": {
+      "main": [
+        [
+          {
+            "node": "Email Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Standardization": {
+      "main": [
+        [
+          {
+            "node": "Generate AI Lead Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "67f93d50-7d21-4364-9eb8-58855cf8cb77",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a23750c5dbc3f635b11781be8be0a79c8772ff91379e93c164335de28ce6b33e"
+  },
+  "nodeGroups": [],
+  "id": "BnkIbg6UbdmT3g84",
+  "tags": []
+}
