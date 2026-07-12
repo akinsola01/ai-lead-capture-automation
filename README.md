@@ -59,5 +59,10 @@ This workflow automates the entire lead management process by collecting custome
 
 
 
+## Full Video
+
+https://drive.google.com/file/d/1_xCMgMBiFwn0355Wc-w9hbLc1Mgihubt/view?usp=drive_link
+
+
 
 
