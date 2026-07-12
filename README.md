@@ -1,6 +1,6 @@
 # AI Lead Capture Automation
 
-![Demo](assets/demo.gif)
+![Demo](assets/ai_lead_capture.gif)
 
 An AI-powered lead capture and qualification workflow that automatically collects leads, evaluates them using AI, stores structured information, and alerts the sales team in real time.
 
@@ -55,44 +55,9 @@ This workflow automates the entire lead management process by collecting custome
 
 ## Architecture
 
-![Architecture](assets/architecture.png)
-
----
-
-## Screenshots
-
-### Lead Capture Form
-
-![Form](assets/fillout-form.png)
-
-### Airtable Record
-
-![Airtable](assets/airtable.png)
-
-### Slack Notification
-
-![Slack](assets/slack-notification.png)
-
-### Customer Email
-
-![Email](assets/acknowledgement-email.png)
+![Architecture](workflow/ai_lead_capture_architecture.png)
 
 
 
-## Future Improvements
 
-- CRM integration
-- Lead scoring
-- Calendar booking
-- Analytics dashboard
-- Multi-language support
 
----
-
-## Author
-
-**Akinsola**
-
-Data Analyst | AI Automation Builder
-
-Building intelligent workflows that help businesses automate repetitive tasks and improve operational efficiency.
