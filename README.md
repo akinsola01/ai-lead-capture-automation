@@ -41,7 +41,7 @@ This workflow automates the entire lead management process by collecting custome
 
 
 
-## Technologies Used
+## Tech Stack
 
 - n8n
 - OpenAI
