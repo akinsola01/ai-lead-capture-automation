@@ -55,7 +55,7 @@ This workflow automates the entire lead management process by collecting custome
 
 ## Architecture
 
-![Architecture](workflow/ai_lead_capture_architecture.png)
+![Architecture](workflow/ai_lead_capture.png)
 
 
 
